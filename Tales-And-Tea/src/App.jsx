@@ -1,49 +1,60 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
-
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.jsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
-
-// export default App
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import BookCard from "./components/BookCard";
+import Navbar from "./components/Navbar";
+import booksData from "./data/books.json";
+import Home from "./pages/Home";       
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import "./index.css";
 function App() {
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    fetch("https://openlibrary.org/subjects/fantasy.json?limit=12")
+      .then((res) => res.json())
+      .then((data) => {
+        const mappedBooks = data.works.map((book, index) => ({
+          id: index,
+          title: book.title,
+          author: book.authors?.[0]?.name || "Unknown",
+          cover: book.cover_id
+            ? `https://covers.openlibrary.org/b/id/${book.cover_id}-L.jpg`
+            : "https://via.placeholder.com/150x220?text=No+Cover",
+        }));
+        setBooks(mappedBooks);
+      })
+      .catch((err) => console.error("Error fetching books:", err));
+  }, []);
+
+  useEffect(() => {
+    setBooks(booksData); // fallback local data
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="p-8 bg-white rounded-2xl shadow-xl text-center space-y-4">
-        <h1 className="text-4xl font-bold text-blue-600">Hello Tailwind! 💙</h1>
-        <p className="text-gray-700">If you see styling, Tailwind is working! 🎉</p>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">
-          Click Me
-        </button>
-      </div>
-    </div>
+    <Router>
+      <Navbar />
+      <Routes>
+        {/* Home page showing your books */}
+        <Route
+          path="/"
+          element={
+            <div className="App p-4">
+              <h1 className="text-2xl font-bold mb-4"> Tales and Tea</h1>
+              <div className="books-container grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {books.map((book) => (
+                  <BookCard key={book.id} book={book} />
+                ))}
+              </div>
+            </div>
+          }
+        />
+
+        {/* Other pages */}
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+    </Router>
   );
 }
 
