@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "genre": "Classic",
+    "language": "English",
+    "cover": "https://covers.openlibrary.org/b/id/8228691-L.jpg"
+  },
+  {
+    "id": 2,
+    "title": "One Hundred Years of Solitude",
+    "author": "Gabriel García Márquez",
+    "genre": "Magical Realism",
+    "language": "Spanish",
+    "cover": "https://covers.openlibrary.org/b/id/8231856-L.jpg"
+  },
+  {
+    "id": 3,
+    "title": "The God of Small Things",
+    "author": "Arundhati Roy",
+    "genre": "Fiction",
+    "language": "English (Indian)",
+    "cover": "https://covers.openlibrary.org/b/id/9251981-L.jpg"
+  }
+]
